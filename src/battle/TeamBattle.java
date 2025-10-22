@@ -79,9 +79,8 @@ public class TeamBattle {
                 int damage = attacker.getDamage();
                 targetToAttack.takeDamage(damage);
 
-                log(String.format("%s завдає %d шкоди %s. У %s залишилось %d HP.",
-                        attacker.getName(), damage, targetToAttack.getName(),
-                        targetToAttack.getName(), targetToAttack.getHealth()));
+                log(attacker.getName() +" deal " + damage + " damage to: " + targetToAttack.getName() +
+                                "He's HP now: " + targetToAttack.getHealth());
             }
         }
     }
