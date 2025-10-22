@@ -195,7 +195,6 @@ public class Main {
         return team;
     }
 
-    // --- 5. Збереження логу ---
     private static void saveLastBattleToFile() {
         System.out.println("\n--- Збереження логу ---");
         if (lastBattleLog.isEmpty()) {
