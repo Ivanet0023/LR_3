@@ -44,9 +44,6 @@ public class TeamBattle {
         return battleLog;
     }
 
-
-
-    // Далі жуть
     private void performRound(List<Droid> attackers, List<Droid> defenders) {
         for (Droid attacker : attackers) {
             if (!attacker.isAlive()) {
@@ -56,33 +53,28 @@ public class TeamBattle {
             if (attacker.getHeal() > 0) {
                 List<Droid> woundedAllies = attackers.stream()
                         .filter(ally -> ally.isAlive() && ally.getHealth() < ally.getMaxHealth())
-                        .collect(Collectors.toList());
+                        .toList();
 
                 if (!woundedAllies.isEmpty()) {
-                    // Якщо є поранені, лікує випадкового з них
                     Droid targetToHeal = woundedAllies.get(random.nextInt(woundedAllies.size()));
                     int healAmount = attacker.getHeal();
                     int healthBefore = targetToHeal.getHealth();
                     targetToHeal.receiveHeal(healAmount);
-                    log(String.format("%s (Хілер) лікує %s. Здоров'я: %d -> %d",
-                            attacker.getName(), targetToHeal.getName(), healthBefore, targetToHeal.getHealth()));
+                    log(attacker.getName() + " heals " + targetToHeal.getName() + ". Health: " + healthBefore + " -> " + targetToHeal.getHealth());
                 } else {
-                    log(attacker.getName() + " (Хілер) не знайшов цілі для лікування.");
+                    log(attacker.getName() + " There is no one to heal.");
                 }
             }
-            // --- ЛОГІКА АТАКУЮЧОГО ДРОЇДА ---
+
             else if (attacker.getDamage() > 0) {
-                // Атакуючий шукає живу ціль у команді ворога
                 List<Droid> aliveDefenders = defenders.stream()
                         .filter(Droid::isAlive)
-                        .collect(Collectors.toList());
+                        .toList();
 
-                // Якщо ворогів не залишилось, нічого не робимо
                 if (aliveDefenders.isEmpty()) {
                     continue;
                 }
 
-                // Атакуємо випадкового живого ворога
                 Droid targetToAttack = aliveDefenders.get(random.nextInt(aliveDefenders.size()));
                 int damage = attacker.getDamage();
                 targetToAttack.takeDamage(damage);
@@ -97,13 +89,12 @@ public class TeamBattle {
     private boolean isTeamAlive(List<Droid> team) {
         for (Droid droid : team) {
             if (droid.isAlive()) {
-                return true; // Знайшли живого, команда ще в бою
+                return true;
             }
         }
-        return false; // Всі мертві
+        return false;
     }
 
-    // Допоміжні методи для логування
     private String getTeamNames(List<Droid> team) {
         return team.stream().map(Droid::getName).collect(Collectors.joining(", "));
     }

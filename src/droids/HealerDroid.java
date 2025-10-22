@@ -5,5 +5,4 @@ public class HealerDroid extends Droid{
         super(name, 125, 0, 150, 20);
     }
 
-
 }
