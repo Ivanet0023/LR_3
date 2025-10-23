@@ -14,10 +14,10 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static final List<Droid> allDroids = new ArrayList<>();
+    private static List<Droid> allDroids = new ArrayList<>();
     private static List<String> lastBattleLog = new ArrayList<>();
-    private static final Scanner scanner = new Scanner(System.in);
-    private static final String LOG_FILE_NAME = "battle_log.txt";
+    private static Scanner scanner = new Scanner(System.in);
+    private static String LOG_FILE_NAME = "log.txt";
 
     public static void main(String[] args) {
         while (true) {
@@ -44,29 +44,24 @@ public class Main {
                     readBattleFromFile();
                     break;
                 case 7:
-                    System.out.println("Вихід з програми...");
-                    scanner.close(); // Закриваємо сканер перед виходом
                     return; // Завершуємо роботу
                 default:
-                    System.out.println("Невірний вибір. Будь ласка, спробуйте ще раз.");
+                    System.out.println("Incorrect choice\n");
             }
-            // Пауза, щоб користувач встиг прочитати вивід
-            System.out.println("\nНатисніть Enter для продовження...");
+            System.out.println("\nEnter to continue");
             scanner.nextLine();
         }
     }
 
-    // --- 1. Друк меню ---
     private static void printMenu() {
-        System.out.println("\n--- DROID ARENA MENU ---");
-        System.out.println("1. Створити дроїда");
-        System.out.println("2. Показати список створених дроїдів");
-        System.out.println("3. Запустити бій 1 на 1");
-        System.out.println("4. Запустити бій команда на команду");
-        System.out.println("5. Записати останній бій у файл");
-        System.out.println("6. Відтворити бій зі збереженого файлу");
-        System.out.println("7. Вийти з програми");
-        System.out.print("Ваш вибір: ");
+        System.out.println("\nMenu");
+        System.out.println("1. Create droid");
+        System.out.println("2. Show droid list");
+        System.out.println("3. Battle 1v1");
+        System.out.println("4. Team Battle");
+        System.out.println("5. Save last battle to log");
+        System.out.println("6. Play demo of log battle");
+        System.out.println("7. Exit");
     }
 
     // Допоміжний метод для безпечного зчитування числа
@@ -76,168 +71,150 @@ public class Main {
                 int choice = Integer.parseInt(scanner.nextLine());
                 return choice;
             } catch (NumberFormatException e) {
-                System.out.print("Будь ласка, введіть число: ");
+                System.out.print("Enter the numb");
             }
         }
     }
 
-    // --- 1. Створення дроїда ---
     private static void createDroid() {
-        System.out.println("\n--- Створення дроїда ---");
-        System.out.println("Оберіть тип дроїда:");
-        System.out.println("1. Воїн (Warrior)");
-        System.out.println("2. Хілер (Healer)");
-        System.out.print("Тип: ");
+        System.out.println("Select droid type:");
+        System.out.println("1. Warrior");
+        System.out.println("2. Healer");
         int type = getUserChoice();
 
-        System.out.print("Введіть ім'я дроїда: ");
+        System.out.print("Enter droid name: ");
         String name = scanner.nextLine();
 
         Droid newDroid;
         if (type == 1) {
             newDroid = new WarriorDroid(name);
-            System.out.println("Воїн " + name + " створений!");
+            System.out.println("Warrior " + name + " created");
         } else if (type == 2) {
             newDroid = new HealerDroid(name);
-            System.out.println("Хілер " + name + " створений!");
+            System.out.println("Healer " + name + " created");
         } else {
-            System.out.println("Невірний тип, створення скасовано.");
+            System.out.println("Incorrect choice, return");
             return;
         }
-        allDroids.add(newDroid); // Додаємо в загальний список
+        allDroids.add(newDroid);
     }
 
-    // --- 2. Показ усіх дроїдів ---
     private static void showAllDroids() {
-        System.out.println("\n--- Список створених дроїдів ---");
+        System.out.println("\nAll droids:");
         if (allDroids.isEmpty()) {
-            System.out.println("У вас ще немає дроїдів. Створіть їх у пункті 1.");
+            System.out.println("DroidList is empty");
             return;
         }
-        // Нумеруємо список для зручного вибору в бою
         for (int i = 0; i < allDroids.size(); i++) {
-            System.out.println((i + 1) + ". " + allDroids.get(i)); // Використовуємо .toString()
+            System.out.println((i + 1) + ". " + allDroids.get(i));
         }
     }
 
-    // --- 3. Бій 1 на 1 ---
     private static void startOneVsOneBattle() {
-        System.out.println("\n--- Бій 1 на 1 ---");
+        System.out.println("\nBattle 1v1");
         if (allDroids.size() < 2) {
-            System.out.println("Для бою потрібно щонайменше 2 дроїди.");
+            System.out.println("You need at least 2 droid for this battle");
             return;
         }
 
-        showAllDroids(); // Показуємо список
-        System.out.print("Оберіть номер першого дроїда: ");
-        int index1 = getUserChoice() - 1; // -1 бо нумерація для юзера з 1
-        System.out.print("Оберіть номер другого дроїда: ");
+        showAllDroids();
+        System.out.println("Select first droid: ");
+        int index1 = getUserChoice() - 1;
+        System.out.println("Select second froid: ");
         int index2 = getUserChoice() - 1;
 
-        // Перевірка коректності індексів
         if (index1 < 0 || index1 >= allDroids.size() || index2 < 0 || index2 >= allDroids.size()) {
-            System.out.println("Невірні номери дроїдів. Бій скасовано.");
+            System.out.println("Incorrect droid ID's, battle canceled");
             return;
         }
 
         Droid droid1 = allDroids.get(index1);
         Droid droid2 = allDroids.get(index2);
 
-        System.out.println("Бій починається!");
+        System.out.println("Battle begins");
         Battle battle = new Battle(droid1, droid2);
-        lastBattleLog = battle.fight(); // Запускаємо бій і ЗБЕРІГАЄМО ЛОГ
+        lastBattleLog = battle.fight();
     }
 
-    // --- 4. Командний бій ---
     private static void startTeamBattle() {
-        System.out.println("\n--- Командний бій ---");
+        System.out.println("\nTeam Battle");
         if (allDroids.size() < 2) {
-            System.out.println("Для командного бою потрібно щонайменше 2 дроїди.");
+            System.out.println("You need at least 2 droid for this battle");
             return;
         }
 
-        System.out.println("Формуємо Команду 1:");
+        System.out.println("Team 1:");
         List<Droid> team1 = selectTeam();
-        System.out.println("\nФормуємо Команду 2:");
+        System.out.println("\nTeam 2:");
         List<Droid> team2 = selectTeam();
 
         if (team1.isEmpty() || team2.isEmpty()) {
-            System.out.println("Одна з команд порожня. Бій скасовано.");
+            System.out.println("One of team is empty.");
             return;
         }
 
-        System.out.println("Командний бій починається!");
+        System.out.println("Team battle begins");
         TeamBattle teamBattle = new TeamBattle(team1, team2);
-        lastBattleLog = teamBattle.fight(); // Запускаємо бій і ЗБЕРІГАЄМО ЛОГ
+        lastBattleLog = teamBattle.fight();
     }
 
-    // Допоміжний метод для вибору команди
     private static List<Droid> selectTeam() {
         List<Droid> team = new ArrayList<>();
         while (true) {
-            System.out.println("\nДоступні дроїди:");
+            System.out.println("\nAvailable droids:");
             showAllDroids();
-            System.out.println("Введіть номер дроїда, щоб додати його в команду (або 0, щоб завершити):");
+            System.out.println("Enter droid ID to add to the team. (0 to finish):");
             int choice = getUserChoice();
-
             if (choice == 0) {
-                break; // Завершуємо вибір
+                break;
             }
+
             int index = choice - 1;
             if (index >= 0 && index < allDroids.size()) {
                 team.add(allDroids.get(index));
-                System.out.println(allDroids.get(index).getName() + " доданий до команди.");
+                System.out.println(allDroids.get(index).getName() + " added to team.");
             } else {
-                System.out.println("Невірний номер.");
+                System.out.println("Incorrect ID.");
             }
         }
-        System.out.println("Формування команди завершено. Склад: " + team.stream().map(Droid::getName).toList());
+        System.out.println("Team members " + team.stream().map(Droid::getName).toList());
         return team;
     }
 
     private static void saveLastBattleToFile() {
-        System.out.println("\n--- Збереження логу ---");
+        System.out.println("\nSaving logs");
         if (lastBattleLog.isEmpty()) {
-            System.out.println("Лог останнього бою порожній. Спочатку проведіть бій.");
+            System.out.println("Log is empty");
             return;
         }
 
         try {
-            // Files.write запише список рядків у файл.
-            // StandardOpenOption.CREATE - створить файл, якщо його немає.
-            // StandardOpenOption.TRUNCATE_EXISTING - перезапише файл, якщо він вже існує.
             Files.write(Paths.get(LOG_FILE_NAME), lastBattleLog,
                     StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-            System.out.println("Бій успішно записано у файл: " + LOG_FILE_NAME);
+            System.out.println("Battle saved to file: " + LOG_FILE_NAME);
         } catch (IOException e) {
-            System.out.println("Помилка! Не вдалося записати файл: " + e.getMessage());
+            System.out.println("Error " + e.getMessage());
         }
     }
 
-    // --- 6. Читання логу ---
     private static void readBattleFromFile() {
-        System.out.println("\n--- Відтворення бою з файлу ---");
+        System.out.println("\nReading battle log ");
         try {
-            // Читаємо всі рядки з файлу в список
             List<String> logLines = Files.readAllLines(Paths.get(LOG_FILE_NAME));
 
             if (logLines.isEmpty()) {
-                System.out.println("Файл логу порожній.");
+                System.out.println("Log is empty.");
                 return;
             }
 
-            System.out.println("--- ПОЧАТОК ЛОГУ " + LOG_FILE_NAME + " ---");
-            // Просто друкуємо кожен рядок
+            System.out.println("Log begin " + LOG_FILE_NAME);
             for (String line : logLines) {
                 System.out.println(line);
-                // Можна додати невелику затримку для "ефекту" відтворення
-                // try { Thread.sleep(300); } catch (InterruptedException e) {}
             }
-            System.out.println("--- КІНЕЦЬ ЛОГУ ---");
+            System.out.println("End of file");
 
         } catch (IOException e) {
-            System.out.println("Помилка! Не вдалося прочитати файл: " + e.getMessage());
-            System.out.println("Переконайтеся, що файл " + LOG_FILE_NAME + " існує і ви зберегли бій.");
+            System.out.println("Error " + e.getMessage());
         }
     }
 }
