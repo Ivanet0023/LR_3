@@ -2,6 +2,7 @@ import battle.Battle;
 import battle.TeamBattle;
 import droids.Droid;
 import droids.HealerDroid;
+import droids.TankDroid;
 import droids.WarriorDroid;
 
 import java.io.IOException;
@@ -80,6 +81,7 @@ public class Main {
         System.out.println("Select droid type:");
         System.out.println("1. Warrior");
         System.out.println("2. Healer");
+        System.out.println("3. Tank");
         int type = getUserChoice();
 
         System.out.print("Enter droid name: ");
@@ -92,6 +94,9 @@ public class Main {
         } else if (type == 2) {
             newDroid = new HealerDroid(name);
             System.out.println("Healer " + name + " created");
+        } else if (type == 3) {
+            newDroid = new TankDroid(name);
+            System.out.println("Tank " + name + " created");
         } else {
             System.out.println("Incorrect choice, return");
             return;
