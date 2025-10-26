@@ -30,7 +30,7 @@ public class Battle {
             int damage = attacker.getDamage();
             defender.takeDamage(damage);
 
-            log(attacker.getName() + "Make " + damage + "damage, leaving " + defender.getName() + " with " + defender.getHealth() + "HP");
+            log(attacker.getName() + " deals " + damage + "damage, leaving " + defender.getName() + " with " + defender.getHealth() + "HP");
 
             Droid temp = attacker;
             attacker = defender;
@@ -38,7 +38,7 @@ public class Battle {
         }
 
         Droid winner = (droid1.isAlive()) ? droid1 : droid2;
-        log("Battle winтer: " + winner.getName());
+        log("Battle winer: " + winner.getName());
 
         droid1.resetHealth();
         droid2.resetHealth();
@@ -51,4 +51,3 @@ public class Battle {
         battleLog.add(message);
     }
 }
-

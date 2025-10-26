@@ -12,6 +12,7 @@ public class TeamBattle {
     private List<Droid> team2;
     private Random random = new Random();
     private List<String> battleLog = new ArrayList<>();
+    private final int MAX_ROUNDS = 1000;
 
     public TeamBattle(List<Droid> team1, List<Droid> team2) {
         this.team1 = team1;
@@ -27,11 +28,18 @@ public class TeamBattle {
         int round = 1;
 
         while (isTeamAlive(team1) && isTeamAlive(team2)) {
+            if (round == MAX_ROUNDS) {
+                log("\nBattle is going to loop.\nBattle result: Draw");
+                team1.forEach(Droid::resetHealth);
+                team2.forEach(Droid::resetHealth);
+                return battleLog;
+            }
             log("\nRound " + round++);
 
             performRound(team1, team2);
             if (isTeamAlive(team2)) {
                 performRound(team2, team1);
+
             }
         }
 
