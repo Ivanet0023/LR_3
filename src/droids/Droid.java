@@ -7,13 +7,15 @@ public class Droid {
     protected int damage;
     protected int maxHealth;
     protected int heal;
+    protected String type;
 
-    public Droid(String name, int health, int damage, int maxHealth, int heal) {
+    public Droid(String name, int health, int damage, int maxHealth, int heal, String type) {
         this.name = name;
         this.health = health;
         this.damage = damage;
         this.maxHealth = maxHealth;
         this.heal = heal;
+        this.type = type;
     }
 
     public String getName() {
@@ -86,6 +88,7 @@ public class Droid {
                 ", damage=" + damage +
                 ", maxHealth=" + maxHealth +
                 ", heal=" + heal +
+                ", type=" + type +
                 '}';
     }
 }
